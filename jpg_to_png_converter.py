@@ -5,9 +5,14 @@ from PIL import Image
 def is_jpg_file(filename):
     return filename.endswith(".jpg") or filename.endswith(".jpeg")
 
-def save_jpg_to_png(source, destination):
-    im = Image.open(source)
-    im.save(destination)
+def save_jpg_to_png(filename, source_folder, destination_folder):
+    source_filename = os.path.join(source_folder, filename)
+    no_ext_filename = os.path.splitext(filename)[0]
+    png_filename = no_ext_filename + ".png"
+    dest_filename = os.path.join(destination_folder, png_filename)
+
+    im = Image.open(source_filename)
+    im.save(dest_filename)
 
 def convert_folder_jpg_to_png(source_folder, destination_folder):
     if not os.path.exists(destination_folder):
@@ -15,11 +20,8 @@ def convert_folder_jpg_to_png(source_folder, destination_folder):
     for file in os.listdir(source_folder):
         if not is_jpg_file(file):
             continue
-        png_filename = os.path.splitext(file)[0] + ".png"
-        dest_filename = os.path.join(destination_folder, png_filename)
-        source_filename = os.path.join(source_folder, file)
         print(f"Converting {file}")
-        save_jpg_to_png(source_filename, dest_filename)
+        save_jpg_to_png(file, source_folder, destination_folder)
 
 def main():
     REQUIRED_LEN_ARGS = 3
@@ -29,7 +31,7 @@ def main():
     print("JPG to PNG Converter")
 
     if len(sys.argv) != REQUIRED_LEN_ARGS:
-        print("Provide source and destination folder as parameters")
+        print("Provide source and destination folder as arguments")
         return
 
     source_folder = sys.argv[SOURCE_ARG]
