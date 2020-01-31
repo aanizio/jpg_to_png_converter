@@ -34,6 +34,11 @@ def main():
 
     source_folder = sys.argv[SOURCE_ARG]
     destination_folder = sys.argv[DEST_ARG]
+
+    if not os.path.exists(source_folder):
+        print("Provide a valid source folder path")
+        return
+
     convert_folder_jpg_to_png(source_folder, destination_folder)
 
 if __name__ == "__main__":
